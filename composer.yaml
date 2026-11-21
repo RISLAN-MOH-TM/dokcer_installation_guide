@@ -1,0 +1,29 @@
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:19.0.2-ce.0
+    container_name: gitlab
+    hostname: gitlab.example.com
+    restart: always
+    shm_size: "256m"
+
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.example.com'
+
+        # GitLab SSH configuration
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+
+        # Disable public user registration
+        gitlab_rails['gitlab_signup_enabled'] = false
+
+        # GitLab email configuration can be added here
+
+    ports:
+      - "80:80"
+      - "443:443"
+      - "2222:22"
+
+    volumes:
+      - /srv/gitlab/config:/etc/gitlab
+      - /srv/gitlab/logs:/var/log/gitlab
+      - /srv/gitlab/data:/var/opt/gitlab
